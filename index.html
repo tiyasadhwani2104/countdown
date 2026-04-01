@@ -3,96 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aarch's 21st birthday</title>
+    <title>Aarch's 21st Birthday</title>
+    
+    <!-- Libraries for Confetti & Animations -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap');
-        :root { --bg-pink: #FDE3E9; --rose: #d81b60; --dark: #444; }
+        @import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Montserrat:wght@300;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --primary-pink: #ff85a1;
+            --deep-rose: #d81b60;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.3);
+            --text-dark: #4a4a4a;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Montserrat', sans-serif; overflow: hidden; background-color: var(--bg-pink); }
-        #canvas-sparkles { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
-        .container { text-align: center; width: 100%; max-width: 800px; z-index: 10; padding: 20px; }
-        .header-group { margin-bottom: 3.5rem; }
-        .name-text { font-family: 'Birthstone', cursive; font-size: 8rem; color: var(--rose); display: block; line-height: 0.4; margin-bottom: 25px; }
-        
-        .birthday-text { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 3.5rem; 
-            color: var(--dark); 
-            letter-spacing: 2px; 
-            display: block; 
-        }
 
-        /* THE PERFECT "st" FIX */
-        .birthday-text sup {
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.35em;
-            font-weight: 400;
-            position: relative;
-            top: -1.8em;
-            left: 2px;
-            text-transform: lowercase;
+            overflow: hidden;
+            background: linear-gradient(-45deg, #ffc1e3, #f8bbd0, #fce4ec, #fff1f3);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
-        .countdown-wrapper { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .time-box { background: white; padding: 35px 15px; border-radius: 50px; min-width: 130px; box-shadow: 0 15px 40px rgba(216, 27, 96, 0.1); transition: 0.3s; }
-        .number { display: block; font-size: 3.5rem; font-weight: 700; color: var(--rose); margin-bottom: 5px; }
-        .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; color: var(--rose); opacity: 0.8; }
-        #birthday-message { display: none; font-family: 'Birthstone', cursive; font-size: 6rem; color: var(--rose); }
-        .balloon { position: absolute; bottom: -150px; width: 50px; height: 70px; background: white; border-radius: 50%; opacity: 0.3; animation: float 15s infinite linear; }
-        @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-120vh); } }
-        @media (max-width: 600px) { .name-text { font-size: 5rem; } .birthday-text { font-size: 1.8rem; } .number { font-size: 2.2rem; } .time-box { min-width: 80px; padding: 20px 5px; } }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Sparkle Cursor Layer */
+        #canvas-sparkles {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .container {
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 4rem 2rem;
+            border-radius: 60px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 50px rgba(216, 27, 96, 0.2);
+            width: 90%;
+            max-width: 750px;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Combined Heading */
+        .header-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .name-text {
+            font-family: 'Birthstone', cursive;
+            font-size: 6rem;
+            color: var(--deep-rose);
+            display: block;
+            line-height: 0.6;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.05));
+        }
+
+        .birthday-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--text-dark);
+            letter-spacing: 4px;
+            display: block;
+            text-transform: none; 
+        }
+
+        /* THE ST CHANGE */
+        .birthday-text sup {
+            font-size: 1.5rem; 
+            vertical-align: super;
+        }
+
+        .countdown-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            perspective: 1000px;
+        }
+
+        .time-box {
+            background: white;
+            padding: 25px 15px;
+            border-radius: 30px;
+            min-width: 120px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-bottom: 5px solid var(--primary-pink);
+        }
+
+        .time-box:hover {
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 20px 30px rgba(216, 27, 96, 0.15);
+        }
+
+        .number {
+            display: block;
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(to bottom, var(--deep-rose), var(--primary-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-variant-numeric: tabular-nums; 
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: #880e4f;
+            margin-top: 5px;
+        }
+
+        #birthday-message {
+            display: none;
+            font-family: 'Birthstone', cursive;
+            font-size: 6rem;
+            color: var(--deep-rose);
+        }
+
+        /* Balloons */
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 60px;
+            height: 85px;
+            background: var(--primary-pink);
+            border-radius: 50%;
+            opacity: 0.5;
+            z-index: 1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-120vh) rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .name-text { font-size: 4.5rem; }
+            .birthday-text { font-size: 1.8rem; letter-spacing: 3px; }
+            .countdown-wrapper { gap: 10px; }
+            .time-box { min-width: 75px; padding: 15px 5px; }
+            .number { font-size: 1.8rem; }
+        }
     </style>
 </head>
-<body onclick="fireConfetti()">
+<body onclick="fireDualConfetti()">
+
     <canvas id="canvas-sparkles"></canvas>
-    <div class="balloon" style="left: 10%;"></div>
-    <div class="balloon" style="left: 85%; animation-delay: 5s;"></div>
-    <div class="container animate__animated animate__fadeIn">
+
+    <!-- Floating Background Decor -->
+    <div class="balloon" style="left: 7%; animation-delay: 0s; background: #ffc1e3;"></div>
+    <div class="balloon" style="left: 20%; animation-delay: 5s; background: #f8bbd0;"></div>
+    <div class="balloon" style="left: 80%; animation-delay: 2s; background: #ff80ab;"></div>
+
+    <div class="container animate__animated animate__zoomIn">
         <div id="countdown-content">
             <div class="header-group">
-                <span class="name-text">Aarch's</span>
-                <span class="birthday-text">21<sup>st</sup> birthday</span>
+                <span class="name-text animate__animated animate__fadeInDown">Aarch's</span>
+                <span class="birthday-text animate__animated animate__fadeInUp animate__delay-1s">21<sup>st</sup> birthday</span>
             </div>
+            
             <div class="countdown-wrapper">
-                <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
-                <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
-                <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
-                <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+                <div class="time-box">
+                    <span class="number" id="days">00</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="hours">00</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="minutes">00</span>
+                    <span class="label">Mins</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="seconds">00</span>
+                    <span class="label">Secs</span>
+                </div>
             </div>
         </div>
-        <div id="birthday-message">Happy 21st Aarch! ✨</div>
+
+        <div id="birthday-message">
+            Happy 21st Aarch! ✨
+            <p style="font-family: 'Montserrat'; font-size: 1.2rem; letter-spacing: 5px; margin-top: 20px; color: #4a4a4a;">THE PARTY STARTS NOW!</p>
+        </div>
     </div>
+
     <script>
+        // Sparkle Trail Logic
         const canvas = document.getElementById('canvas-sparkles');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
         class Particle {
-            constructor(x, y) { this.x = x; this.y = y; this.size = Math.random() * 4 + 1; this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1; this.color = `hsl(${Math.random() * 20 + 330}, 100%, 80%)`; this.opacity = 1; }
-            update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.015; }
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.size = Math.random() * 4 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = `hsl(${Math.random() * 30 + 330}, 100%, 75%)`;
+                this.opacity = 1;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.02; }
             draw() { ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
+
         window.addEventListener('mousemove', (e) => { for (let i = 0; i < 2; i++) particles.push(new Particle(e.x, e.y)); });
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); if (particles[i].opacity <= 0) { particles.splice(i, 1); i--; } } requestAnimationFrame(animate); }
+        window.addEventListener('touchstart', (e) => { let touch = e.touches[0]; for (let i = 0; i < 8; i++) particles.push(new Particle(touch.clientX, touch.clientY)); });
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update(); particles[i].draw();
+                if (particles[i].opacity <= 0) { particles.splice(i, 1); i--; }
+            }
+            requestAnimationFrame(animate);
+        }
         animate();
-        function fireConfetti() { confetti({ particleCount: 40, angle: 60, spread: 60, origin: { x: 0, y: 0.8 } }); confetti({ particleCount: 40, angle: 120, spread: 60, origin: { x: 1, y: 0.8 } }); }
-        setTimeout(fireConfetti, 1000);
+
+        function fireDualConfetti() {
+            var colors = ['#ff85a1', '#d81b60', '#ffffff', '#d4af37'];
+            confetti({ particleCount: 30, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: colors });
+            confetti({ particleCount: 30, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: colors });
+        }
+
+        setTimeout(fireDualConfetti, 1200);
+
         function updateCountdown() {
             const currentYear = new Date().getFullYear();
             let target = new Date(`April 8, ${currentYear} 00:00:00`).getTime();
             const now = new Date().getTime();
-            if (now > target) { if (!(new Date().getMonth() === 3 && new Date().getDate() === 8)) target = new Date(`April 8, ${currentYear + 1} 00:00:00`).getTime(); }
+            if (now > target) {
+                const isBday = new Date().getMonth() === 3 && new Date().getDate() === 8;
+                if (!isBday) target = new Date(`April 8, ${currentYear + 1} 00:00:00`).getTime();
+            }
             const diff = target - now;
-            if (diff <= 0) { document.getElementById('countdown-content').style.display = 'none'; document.getElementById('birthday-message').style.display = 'block'; return; }
-            document.getElementById('days').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
-            document.getElementById('hours').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            if (diff <= 0) {
+                document.getElementById('countdown-content').style.display = 'none';
+                document.getElementById('birthday-message').style.display = 'block';
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
         }
-        setInterval(updateCountdown, 1000); updateCountdown();
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
 </body>
 </html>
